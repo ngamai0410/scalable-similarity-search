@@ -1,6 +1,3 @@
-# Dataset — large generated file, excluded from version control
-user_profiles.csv
-
 # Python cache
 __pycache__/
 *.pyc
