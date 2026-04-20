@@ -78,4 +78,11 @@ class LinearSearch:
                 heapq.heapreplace(heap, (-dist, profile.id, profile))
 
         # Convert to ascending order for output
-        return sorted((-neg_d, p) for neg_d, _, p in heap)
+        # Sorting by (-distance, profile_id) ensures that we get the correct order:
+        # * Primary sort by distance ascending (since we negated it, we sort by -distance).
+        # * Secondary sort by profile_id ascending to break ties consistently.
+        ordered = sorted(
+            ((-neg_d, pid, p) for neg_d, pid, p in heap),
+            key=lambda x: (x[0], x[1])
+        )
+        return [(dist, p) for dist, _, p in ordered]

@@ -153,7 +153,7 @@ class KDTree:
         list of (float, UserProfile)
             Exactly min(k, dataset_size) pairs, sorted by distance ascending.
         """
-        q_vec    = query.vector
+        q_vec = query.vector
         q_domain = query.domain_idx
 
         # Max-heap: stores (-distance, profile_id, profile)
@@ -187,7 +187,7 @@ class KDTree:
             # Nominal dimension 4 (binary distance)
             if not (bmin[4] <= q_domain <= bmax[4]):
                 # No profile in this subtree can share the query's domain
-                sq += weights[4]   # * 1.0²
+                sq += weights[4]  # * 1.0²
 
             return math.sqrt(sq)
 
@@ -210,7 +210,7 @@ class KDTree:
 
             # ---- Recurse into children ---------------------------------
             axis = node.axis
-            sv   = node.split_val
+            sv = node.split_val
             diff = q_vec[axis] - sv
 
             # Visit the nearer half-space first for better pruning.
@@ -241,5 +241,9 @@ class KDTree:
 
         _search(self._root)
 
-        # Return sorted ascending by distance
-        return sorted((-neg_d, p) for neg_d, _, p in heap)
+        # Return sorted ascending by distance with deterministic tie-break on id
+        ordered = sorted(
+            ((-neg_d, pid, p) for neg_d, pid, p in heap),
+            key=lambda x: (x[0], x[1])
+        )
+        return [(dist, p) for dist, _, p in ordered]
