@@ -137,28 +137,57 @@ K-D Tree (kdtree.py)
           Average query time: O(k · n^(1−1/d)) for d=5 dimensions.
 
 ----------------------------------------------------------------
-7. DEMO VIDEO LINK
+7. BENCHMARK RESULTS SUMMARY
 ----------------------------------------------------------------
-  [Insert link here after recording]
-
-================================================================
+Full results are available in benchmark_results.txt.
+ 
+  Experiment 1 — Dataset Size (k=5, equal weights)
+    1,000   profiles: Baseline=0.253ms,  K-D Tree=0.170ms, Speedup=1.5x
+    10,000  profiles: Baseline=2.428ms,  K-D Tree=0.403ms, Speedup=6.0x
+    100,000 profiles: Baseline=23.315ms, K-D Tree=0.123ms, Speedup=189.6x
+ 
+  Experiment 2 — Value of k (n=100,000, equal weights)
+    k=1:  Speedup=353.5x
+    k=10: Speedup=133.6x
+    k=20: Speedup=89.7x
+ 
+  Experiment 3 — Weight combinations (n=100,000, k=5)
+    K-D Tree handles all weight configurations correctly
+ 
+  Experiment 4 — Correctness
+    20/20 random queries matched perfectly (100% pass rate)
+ 
+  Experiment 5 — K-D Tree build time
+    100,000 profiles built in 198.22ms (one-off cost)
+ 
 ----------------------------------------------------------------
 8. BENCHMARK / EXPERIMENT SCRIPT
 ----------------------------------------------------------------
 To run the full set of experiments (Member 4's benchmarking):
-
+ 
   python3 benchmark.py
-
+ 
   Runs 5 experiments comparing Baseline vs K-D Tree across
   different dataset sizes, k values, and weight combinations.
   Results are saved automatically to benchmark_results.txt.
-
+ 
 ----------------------------------------------------------------
 9. TEAM MEMBERS & CONTRIBUTIONS
 ----------------------------------------------------------------
-  Member 1 — Nga 25%  profile.py, dataset.py
-  Member 2 — Nam  25%  baseline.py, distance.py
-  Member 3 — Adam  25%  kdtree.py
-  Member 4 — Yoshita  25%  main.py, benchmark.py, README.txt,
-  
-  experiments, report consolidation
+  Member 1 — Nga Mai Thanh  25%  profile.py, dataset.py, distance.py
+                                  Data generation, encoding,
+                                  normalisation, distance function
+  Member 2 — Nam            25%  baseline.py
+                                  Brute-force k-NN search
+  Member 3 — Adam           25%  kdtree.py
+                                  K-D Tree construction and search
+  Member 4 — Yoshita Sarin  25%  benchmark.py, benchmark_results.txt,
+                                  README.txt, experiments,
+                                  report consolidation
+ 
+----------------------------------------------------------------
+10. DEMO VIDEO LINK
+----------------------------------------------------------------
+  [Insert link here after recording]
+ 
+================================================================
