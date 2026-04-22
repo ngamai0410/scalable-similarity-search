@@ -1,0 +1,94 @@
+═════════════════════════════════════════════════════════════════
+  Benchmark Script — Scalable Similarity Search
+  Algorithms & Analysis 2026A
+═════════════════════════════════════════════════════════════════
+
+Loading dataset …
+  Loaded 100,000 profiles from user_profiles.csv
+
+═════════════════════════════════════════════════════════════════
+  Experiment 1 — Effect of Dataset Size  (k=5, equal weights)
+═════════════════════════════════════════════════════════════════
+        Size    Brute Force (ms)    K-D Tree (ms)    Speedup   Correct?
+  ----------  ------------------  ---------------  ---------  ---------
+       1,000               0.253            0.170        1.5×     ✓ PASS
+       5,000               1.804            0.552        3.3×     ✓ PASS
+      10,000               2.428            0.403        6.0×     ✓ PASS
+      50,000              11.885            0.588       20.2×     ✓ PASS
+     100,000              23.315            0.123      189.6×     ✓ PASS
+
+═════════════════════════════════════════════════════════════════
+  Experiment 2 — Effect of k  (n=100,000, equal weights)
+═════════════════════════════════════════════════════════════════
+      k    Brute Force (ms)    K-D Tree (ms)    Speedup   Correct?
+  -----  ------------------  ---------------  ---------  ---------
+      1              22.826            0.065      353.5×     ✓ PASS
+      5              23.235            0.137      169.8×     ✓ PASS
+     10              22.725            0.170      133.6×     ✓ PASS
+     15              22.665            0.212      106.9×     ✓ PASS
+     20              22.875            0.255       89.7×     ✓ PASS
+
+═════════════════════════════════════════════════════════════════
+  Experiment 3 — Effect of Weight Combinations  (n=100,000, k=5)
+═════════════════════════════════════════════════════════════════
+  Weight Set                   Brute Force (ms)    K-D Tree (ms)   Correct?
+  -------------------------  ------------------  ---------------  ---------
+  Equal weights                          22.510            0.115     ✓ PASS
+  Age dominates                          22.589            0.110     ✓ PASS
+  Income dominates                       22.555            0.136     ✓ PASS
+  Domain dominates                       22.514            0.116     ✓ PASS
+  Degree dominates                       22.625            0.111     ✓ PASS
+  Mixed weights                          22.953            0.073     ✓ PASS
+
+═════════════════════════════════════════════════════════════════
+  Experiment 4 — Correctness Verification  (20 random queries)
+═════════════════════════════════════════════════════════════════
+    Query     Status  Brute Force top-1                    K-D Tree top-1
+  -------  ---------  -----------------------------------  -----------------------------------
+        1     ✓ PASS  #83810                               #83810
+        2     ✓ PASS  #14592                               #14592
+        3     ✓ PASS  #3278                                #3278
+        4     ✓ PASS  #97196                               #97196
+        5     ✓ PASS  #36048                               #36048
+        6     ✓ PASS  #32098                               #32098
+        7     ✓ PASS  #29256                               #29256
+        8     ✓ PASS  #18289                               #18289
+        9     ✓ PASS  #96530                               #96530
+       10     ✓ PASS  #13434                               #13434
+       11     ✓ PASS  #88696                               #88696
+       12     ✓ PASS  #97080                               #97080
+       13     ✓ PASS  #71482                               #71482
+       14     ✓ PASS  #11395                               #11395
+       15     ✓ PASS  #77397                               #77397
+       16     ✓ PASS  #55302                               #55302
+       17     ✓ PASS  #4165                                #4165
+       18     ✓ PASS  #3905                                #3905
+       19     ✓ PASS  #12280                               #12280
+       20     ✓ PASS  #28657                               #28657
+
+  Result: 20/20 queries passed  (100%)
+
+═════════════════════════════════════════════════════════════════
+  Experiment 5 — K-D Tree Build Time vs Dataset Size
+═════════════════════════════════════════════════════════════════
+        Size    Build Time (ms)       Nodes
+  ----------  -----------------  ----------
+       1,000               1.03       1,000
+       5,000               6.11       5,000
+      10,000              12.40      10,000
+      50,000              85.06      50,000
+     100,000             198.22     100,000
+
+═════════════════════════════════════════════════════════════════
+  Summary
+═════════════════════════════════════════════════════════════════
+  Key findings to include in your report:
+
+  1. Brute force time grows linearly with dataset size (O(n))
+  2. K-D Tree is significantly faster on large datasets
+  3. Both methods return identical results (correctness verified)
+  4. Changing k has minimal effect on brute force time
+  5. K-D Tree build time is a one-off cost amortised over many queries
+
+  Copy the tables above into Section 3 (Evaluation) of your report.
+  Fill in the Speedup column analysis in your own words.
