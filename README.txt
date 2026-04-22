@@ -19,17 +19,17 @@ are part of Python's standard library.
 ----------------------------------------------------------------
 2. FILE STRUCTURE
 ----------------------------------------------------------------
-group-project/
-  main.py        — entry point (launch this file)
-  profile.py     — UserProfile data class
-  dataset.py     — dataset generation and CSV I/O
-  distance.py    — weighted distance function
-  baseline.py    — baseline linear-scan search
-  kdtree.py      — optimised k-d tree search
-  README.txt     — this file
-
-  user_profiles.csv  (generated automatically on first run)
-
+group-project/  
+  main.py               — entry point (launch this file)
+  profile.py            — UserProfile data class
+  dataset.py            — dataset generation and CSV I/O
+  distance.py           — weighted distance function
+  baseline.py           — baseline linear-scan search
+  kdtree.py             — optimised k-d tree search
+  benchmark.py          — experiment and benchmarking script
+  README.txt            — this file
+  user_profiles.csv     — pre-generated dataset (100,000 profiles)
+  benchmark_results.txt — full experiment results
 ----------------------------------------------------------------
 3. HOW TO RUN
 ----------------------------------------------------------------
@@ -68,6 +68,13 @@ All commands are run from inside the group-project/ directory.
 
   Runs a single canned query and shows full output — useful for
   demonstrations and the submission video.
+
+-- f) Full experiment script --
+  python3 benchmark.py
+ 
+  Runs 5 experiments comparing Baseline vs K-D Tree across
+  different dataset sizes, k values, and weight combinations.
+  Results are saved automatically to benchmark_results.txt.
 
 ----------------------------------------------------------------
 4. INPUT FORMAT
