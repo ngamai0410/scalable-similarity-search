@@ -142,3 +142,23 @@ K-D Tree (kdtree.py)
   [Insert link here after recording]
 
 ================================================================
+----------------------------------------------------------------
+8. BENCHMARK / EXPERIMENT SCRIPT
+----------------------------------------------------------------
+To run the full set of experiments (Member 4's benchmarking):
+
+  python3 benchmark.py
+
+  Runs 5 experiments comparing Baseline vs K-D Tree across
+  different dataset sizes, k values, and weight combinations.
+  Results are saved automatically to benchmark_results.txt.
+
+----------------------------------------------------------------
+9. TEAM MEMBERS & CONTRIBUTIONS
+----------------------------------------------------------------
+  Member 1 — Nga 25%  profile.py, dataset.py
+  Member 2 — Nam  25%  baseline.py, distance.py
+  Member 3 — Adam  25%  kdtree.py
+  Member 4 — Yoshita  25%  main.py, benchmark.py, README.txt,
+  
+  experiments, report consolidation
