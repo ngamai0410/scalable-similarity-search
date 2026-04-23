@@ -6,10 +6,17 @@ Member 4: Experiments, Benchmarking, and Report Consolidation
 
 HOW TO RUN
 ----------
-    python benchmark.py
+    python3 benchmark.py
 
 Make sure this file is in the same folder as:
     profile.py, dataset.py, baseline.py, kdtree.py, distance.py
+
+NOTE ON LARGE DATASETS
+----------------------
+This script tests dataset sizes up to 1,000,000 profiles.
+Brute force on 1M profiles will be slow (~200+ seconds per query).
+The script skips brute force for sizes above 500,000 to save time
+and only runs the K-D Tree for the largest sizes.
 
 OUTPUT
 ------
@@ -18,11 +25,11 @@ so you can copy the numbers directly into your report.
 
 EXPERIMENTS
 -----------
-  1. Dataset size     — vary n, fix k=5, equal weights
-  2. Value of k       — vary k, fix n=100000, equal weights
-  3. Weight sets      — vary weights, fix n=100000, k=5
+  1. Dataset size     — vary n from 1k to 1M, fix k=5, equal weights
+  2. Value of k       — vary k, fix n=100,000, equal weights
+  3. Weight sets      — vary weights, fix n=100,000, k=5
   4. Correctness      — verify k-d tree matches brute force on 20 queries
-  5. Build time       — measure k-d tree construction time
+  5. Build time       — measure k-d tree construction time up to 1M
 """
 
 import random
@@ -109,28 +116,42 @@ def subsample(all_profiles, n, seed=RANDOM_SEED):
 # ═══════════════════════════════════════════ EXPERIMENT 1 ════════════════════
 # Vary dataset size — how does each method scale?
 
+# Sizes above this threshold skip brute force (too slow for a laptop)
+BRUTE_FORCE_LIMIT = 500_000
+
 def experiment_1(all_profiles):
     section('Experiment 1 — Effect of Dataset Size  (k=5, equal weights)')
 
-    sizes   = [1_000, 5_000, 10_000, 50_000, 100_000]
+    sizes   = [1_000, 5_000, 10_000, 50_000, 100_000,
+               200_000, 300_000, 500_000, 1_000_000]
     k       = 5
     weights = [1.0, 1.0, 1.0, 1.0, 1.0]
     query   = make_query()
 
-    log(f'  {"Size":>10}  {"Brute Force (ms)":>18}  {"K-D Tree (ms)":>15}  {"Speedup":>9}  {"Correct?":>9}')
-    log(f'  {"-"*10}  {"-"*18}  {"-"*15}  {"-"*9}  {"-"*9}')
+    log(f'  {"Size":>12}  {"Brute Force (ms)":>18}  {"K-D Tree (ms)":>15}  {"Speedup":>9}  {"Correct?":>9}')
+    log(f'  {"-"*12}  {"-"*18}  {"-"*15}  {"-"*9}  {"-"*9}')
 
     for n in sizes:
+        if n > len(all_profiles):
+            log(f'  {n:>12,}  {"(not enough data)":>18}  {"—":>15}  {"—":>9}  {"—":>9}')
+            continue
+
         profiles = subsample(all_profiles, n)
         baseline, kdtree, _ = build_indices(profiles)
 
-        bl_time, bl_res = time_search(baseline.search, query, k, weights)
-        kd_time, kd_res = time_search(kdtree.search,   query, k, weights)
+        # Skip brute force for very large sizes — too slow
+        if n <= BRUTE_FORCE_LIMIT:
+            bl_time, bl_res = time_search(baseline.search, query, k, weights)
+            kd_time, kd_res = time_search(kdtree.search,   query, k, weights)
+            speedup = bl_time / kd_time if kd_time > 0 else float('inf')
+            correct = '✓ PASS' if check_correctness(bl_res, kd_res) else '✗ FAIL'
+            log(f'  {n:>12,}  {bl_time*1000:>18.3f}  {kd_time*1000:>15.3f}  {speedup:>9.1f}×  {correct:>9}')
+        else:
+            kd_time, _ = time_search(kdtree.search, query, k, weights)
+            log(f'  {n:>12,}  {"(skipped)":>18}  {kd_time*1000:>15.3f}  {"—":>9}  {"—":>9}')
 
-        speedup = bl_time / kd_time if kd_time > 0 else float('inf')
-        correct = '✓ PASS' if check_correctness(bl_res, kd_res) else '✗ FAIL'
-
-        log(f'  {n:>10,}  {bl_time*1000:>18.3f}  {kd_time*1000:>15.3f}  {speedup:>9.1f}×  {correct:>9}')
+    log()
+    log(f'  Note: Brute force skipped for n > {BRUTE_FORCE_LIMIT:,} (too slow for laptop benchmarking)')
 
 
 # ═══════════════════════════════════════════ EXPERIMENT 2 ════════════════════
@@ -234,19 +255,24 @@ def experiment_4(all_profiles):
 def experiment_5(all_profiles):
     section('Experiment 5 — K-D Tree Build Time vs Dataset Size')
 
-    sizes = [1_000, 5_000, 10_000, 50_000, 100_000]
+    sizes = [1_000, 5_000, 10_000, 50_000, 100_000,
+             200_000, 300_000, 500_000, 1_000_000]
 
-    log(f'  {"Size":>10}  {"Build Time (ms)":>17}  {"Nodes":>10}')
-    log(f'  {"-"*10}  {"-"*17}  {"-"*10}')
+    log(f'  {"Size":>12}  {"Build Time (ms)":>17}  {"Nodes":>12}')
+    log(f'  {"-"*12}  {"-"*17}  {"-"*12}')
 
     for n in sizes:
+        if n > len(all_profiles):
+            log(f'  {n:>12,}  {"(not enough data)":>17}  {"—":>12}')
+            continue
+
         profiles = subsample(all_profiles, n)
 
         t0     = time.perf_counter()
         KDTree(profiles)
         build_t = time.perf_counter() - t0
 
-        log(f'  {n:>10,}  {build_t*1000:>17.2f}  {n:>10,}')
+        log(f'  {n:>12,}  {build_t*1000:>17.2f}  {n:>12,}')
 
 
 # ═══════════════════════════════════════════ SUMMARY ═════════════════════════
@@ -273,16 +299,45 @@ def main():
     log('  Algorithms & Analysis 2026A')
     separator()
 
-    # Load or generate the full 100k dataset once
-    log('\nLoading dataset …')
-    if DatasetGenerator.exists('user_profiles.csv'):
+    # Load or generate a 1M dataset
+    # If user_profiles_1m.csv exists, load it
+    # Otherwise check for user_profiles.csv and top it up to 1M
+    # Otherwise generate fresh 1M profiles
+    TARGET = 1_000_000
+
+    if DatasetGenerator.exists('user_profiles_1m.csv'):
+        log('\nLoading 1M dataset from user_profiles_1m.csv …')
+        t0 = time.perf_counter()
+        all_profiles = DatasetGenerator.load('user_profiles_1m.csv')
+        log(f'  Loaded {len(all_profiles):,} profiles in {(time.perf_counter()-t0):.1f}s')
+
+    elif DatasetGenerator.exists('user_profiles.csv'):
+        log('\nLoading existing dataset from user_profiles.csv …')
+        t0 = time.perf_counter()
         all_profiles = DatasetGenerator.load('user_profiles.csv')
-        log(f'  Loaded {len(all_profiles):,} profiles from user_profiles.csv')
+        log(f'  Loaded {len(all_profiles):,} profiles in {(time.perf_counter()-t0):.1f}s')
+
+        if len(all_profiles) < TARGET:
+            log(f'\n  Dataset has {len(all_profiles):,} profiles.')
+            log(f'  Generating full {TARGET:,} profile dataset for large-scale experiments …')
+            log('  (This may take 1-2 minutes)')
+            t0 = time.perf_counter()
+            all_profiles = DatasetGenerator.generate(TARGET)
+            log(f'  Generated in {(time.perf_counter()-t0):.1f}s')
+            log('  Saving to user_profiles_1m.csv …')
+            t0 = time.perf_counter()
+            DatasetGenerator.save(all_profiles, 'user_profiles_1m.csv')
+            log(f'  Saved in {(time.perf_counter()-t0):.1f}s')
     else:
-        log('  Generating 100,000 profiles (this may take a moment) …')
-        all_profiles = DatasetGenerator.generate(100_000)
-        DatasetGenerator.save(all_profiles)
-        log('  Saved to user_profiles.csv')
+        log(f'\nNo dataset found — generating {TARGET:,} profiles …')
+        log('  (This may take 1-2 minutes)')
+        t0 = time.perf_counter()
+        all_profiles = DatasetGenerator.generate(TARGET)
+        log(f'  Generated in {(time.perf_counter()-t0):.1f}s')
+        DatasetGenerator.save(all_profiles, 'user_profiles_1m.csv')
+        log('  Saved to user_profiles_1m.csv')
+
+    log(f'\n  Total profiles available: {len(all_profiles):,}')
 
     # Run all experiments
     experiment_1(all_profiles)
