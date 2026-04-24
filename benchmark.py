@@ -122,8 +122,7 @@ BRUTE_FORCE_LIMIT = 500_000
 def experiment_1(all_profiles):
     section('Experiment 1 — Effect of Dataset Size  (k=5, equal weights)')
 
-    sizes   = [1_000, 5_000, 10_000, 50_000, 100_000,
-               200_000, 300_000, 500_000, 1_000_000]
+    sizes   = [100_000, 200_000, 300_000, 500_000, 1_000_000]
     k       = 5
     weights = [1.0, 1.0, 1.0, 1.0, 1.0]
     query   = make_query()
@@ -255,8 +254,7 @@ def experiment_4(all_profiles):
 def experiment_5(all_profiles):
     section('Experiment 5 — K-D Tree Build Time vs Dataset Size')
 
-    sizes = [1_000, 5_000, 10_000, 50_000, 100_000,
-             200_000, 300_000, 500_000, 1_000_000]
+    sizes = [100_000, 200_000, 300_000, 500_000, 1_000_000]
 
     log(f'  {"Size":>12}  {"Build Time (ms)":>17}  {"Nodes":>12}')
     log(f'  {"-"*12}  {"-"*17}  {"-"*12}')
