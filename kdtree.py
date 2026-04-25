@@ -56,14 +56,15 @@ Dimension details
    3    self_learning_hours    [0, 1]  (continuous, normalised)
    4    favourite_domain       {0,1,2,3,4}  (raw index; binary dist used)
 
-No external libraries are used.  Only Python's built-in 'heapq' and 'math'.
+No external libraries are used.  The priority queue is provided by our own
+MaxHeap implementation in heap.py.
 """
 
-import heapq
 import math
 import sys
 
 from distance import weighted_distance
+from heap     import MaxHeap
 
 
 # ================================================================ Node class ==
@@ -156,8 +157,10 @@ class KDTree:
         q_vec = query.vector
         q_domain = query.domain_idx
 
-        # Max-heap: stores (-distance, profile_id, profile)
-        heap = []
+        # Max-heap of size k.  Stores (distance, profile_id, profile); the
+        # largest distance is at the root and represents the current "worst"
+        # of the top-k candidates.  profile_id breaks ties deterministically.
+        heap = MaxHeap()
 
         # We track the bounding box implicitly by modifying bmin/bmax in place
         # and restoring them after each recursive call (backtracking).
@@ -198,15 +201,15 @@ class KDTree:
             # ---- Pruning ------------------------------------------------
             # Once we have k candidates, prune this subtree if its closest
             # possible point is no better than the current k-th distance.
-            if len(heap) == k and _min_bbox_dist(bmin, bmax) >= -heap[0][0]:
+            if len(heap) == k and _min_bbox_dist(bmin, bmax) >= heap.peek()[0]:
                 return
 
             # ---- Visit current node ------------------------------------
             dist = weighted_distance(query, node.profile, weights)
             if len(heap) < k:
-                heapq.heappush(heap, (-dist, node.profile.id, node.profile))
-            elif dist < -heap[0][0]:
-                heapq.heapreplace(heap, (-dist, node.profile.id, node.profile))
+                heap.push((dist, node.profile.id, node.profile))
+            elif dist < heap.peek()[0]:
+                heap.replace_root((dist, node.profile.id, node.profile))
 
             # ---- Recurse into children ---------------------------------
             axis = node.axis
@@ -242,8 +245,5 @@ class KDTree:
         _search(self._root)
 
         # Return sorted ascending by distance with deterministic tie-break on id
-        ordered = sorted(
-            ((-neg_d, pid, p) for neg_d, pid, p in heap),
-            key=lambda x: (x[0], x[1])
-        )
+        ordered = sorted(heap.items(), key=lambda x: (x[0], x[1]))
         return [(dist, p) for dist, _, p in ordered]

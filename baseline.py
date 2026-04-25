@@ -21,13 +21,12 @@ Time  (query): O(n)   — one pass through all n profiles;
                          is effectively O(1) here.
 Space (query): O(k)   — heap holds at most k entries at any time
 
-No external libraries are used.  Only Python's built-in 'heapq' module is used
-for the priority-queue operations.
+No external libraries are used.  The priority queue is provided by our own
+MaxHeap implementation in heap.py.
 """
 
-import heapq
-
 from distance import weighted_distance
+from heap     import MaxHeap
 
 
 class LinearSearch:
@@ -63,25 +62,22 @@ class LinearSearch:
         list of (float, UserProfile)
             Exactly min(k, n) pairs sorted by distance ascending.
         """
-        # Max-heap: each entry is (-distance, profile_id, profile).
-        # Negating the distance turns Python's min-heap into a max-heap so that
-        # heap[0] always exposes the *largest* distance in the current top-k set.
-        # profile_id breaks ties deterministically without comparing profile objects.
-        heap = []
+        # Max-heap of size k.  Each entry is (distance, profile_id, profile).
+        # Tuples compare lexicographically, so the entry with the largest
+        # distance floats to the root; profile_id breaks ties deterministically
+        # without ever comparing the profile objects themselves.
+        heap = MaxHeap()
 
         for profile in self.profiles:
             dist = weighted_distance(query, profile, weights)
 
             if len(heap) < k:
-                heapq.heappush(heap, (-dist, profile.id, profile))
-            elif dist < -heap[0][0]:
-                heapq.heapreplace(heap, (-dist, profile.id, profile))
+                heap.push((dist, profile.id, profile))
+            elif dist < heap.peek()[0]:
+                heap.replace_root((dist, profile.id, profile))
 
         # Convert to ascending order for output
         # * Primary sort by distance ascending
         # * Secondary sort by profile_id ascending to break ties consistently.
-        ordered = sorted(
-            ((-neg_d, pid, p) for neg_d, pid, p in heap),
-            key=lambda x: (x[0], x[1])
-        )
+        ordered = sorted(heap.items(), key=lambda x: (x[0], x[1]))
         return [(dist, p) for dist, _, p in ordered]
