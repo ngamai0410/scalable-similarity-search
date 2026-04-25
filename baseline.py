@@ -8,7 +8,7 @@ max-heap of size k that holds the k smallest distances seen so far.
 
 * If the heap has fewer than k entries, push unconditionally.
 * Otherwise, if the current distance is smaller than the largest distance in
-  the heap (heap[0]), replace the root.
+  the heap (heap.peek()), replace the root.
 
 Using a max-heap of the k nearest candidates lets us determine in O(1) whether
 a new candidate could improve the answer.

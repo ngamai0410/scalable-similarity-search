@@ -13,22 +13,25 @@ Check your Python version:
   python3 --version
 
 No virtual environment or package installation is required.
-All modules used (random, csv, heapq, math, time, sys, os)
-are part of Python's standard library.
+All Python modules used (random, csv, math, time, sys, os) are
+part of Python's standard library.  The priority queue is provided
+by our own MaxHeap implementation in heap.py — heapq is NOT used.
 
 ----------------------------------------------------------------
 2. FILE STRUCTURE
 ----------------------------------------------------------------
-group-project/  
+group-project/
   main.py               — entry point (launch this file)
   profile.py            — UserProfile data class
   dataset.py            — dataset generation and CSV I/O
   distance.py           — weighted distance function
+  heap.py               — custom MaxHeap (replaces heapq)
   baseline.py           — baseline linear-scan search
   kdtree.py             — optimised k-d tree search
   benchmark.py          — experiment and benchmarking script
   README.txt            — this file
   user_profiles.csv     — pre-generated dataset (100,000 profiles)
+  user_profiles_1m.csv  — extended dataset (1,000,000 profiles)
   benchmark_results.txt — full experiment results
 ----------------------------------------------------------------
 3. HOW TO RUN
@@ -147,25 +150,32 @@ K-D Tree (kdtree.py)
 7. BENCHMARK RESULTS SUMMARY
 ----------------------------------------------------------------
 Full results are available in benchmark_results.txt.
- 
+
   Experiment 1 — Dataset Size (k=5, equal weights)
-    1,000   profiles: Baseline=0.253ms,  K-D Tree=0.170ms, Speedup=1.5x
-    10,000  profiles: Baseline=2.428ms,  K-D Tree=0.403ms, Speedup=6.0x
-    100,000 profiles: Baseline=23.315ms, K-D Tree=0.123ms, Speedup=189.6x
- 
+      100,000 profiles: Baseline= 22.778ms, K-D Tree=0.131ms, Speedup=173.8×
+      200,000 profiles: Baseline= 46.234ms, K-D Tree=0.103ms, Speedup=448.1×
+      300,000 profiles: Baseline= 68.943ms, K-D Tree=0.114ms, Speedup=606.6×
+      500,000 profiles: Baseline=116.519ms, K-D Tree=0.117ms, Speedup=998.7×
+    1,000,000 profiles: Baseline=(skipped), K-D Tree=0.185ms, Speedup=    —
+
   Experiment 2 — Value of k (n=100,000, equal weights)
-    k=1:  Speedup=353.5x
-    k=10: Speedup=133.6x
-    k=20: Speedup=89.7x
- 
+    k=1:  Speedup=380.6×
+    k=5:  Speedup=200.4×
+    k=10: Speedup=141.7×
+    k=15: Speedup=106.0×
+    k=20: Speedup= 86.8×
+
   Experiment 3 — Weight combinations (n=100,000, k=5)
-    K-D Tree handles all weight configurations correctly
- 
+    K-D Tree handles all 6 weight configurations correctly (✓ PASS)
+
   Experiment 4 — Correctness
     20/20 random queries matched perfectly (100% pass rate)
- 
+
   Experiment 5 — K-D Tree build time
-    100,000 profiles built in 198.22ms (one-off cost)
+      100,000 profiles built in   244.55ms
+      200,000 profiles built in   432.97ms
+      500,000 profiles built in 1,523.72ms
+    1,000,000 profiles built in 3,033.43ms (one-off cost)
  
 ----------------------------------------------------------------
 8. BENCHMARK / EXPERIMENT SCRIPT

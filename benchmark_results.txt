@@ -4,7 +4,7 @@
 ═════════════════════════════════════════════════════════════════
 
 Loading 1M dataset from user_profiles_1m.csv …
-  Loaded 1,000,000 profiles in 1.4s
+  Loaded 1,000,000 profiles in 1.2s
 
   Total profiles available: 1,000,000
 
@@ -13,11 +13,11 @@ Loading 1M dataset from user_profiles_1m.csv …
 ═════════════════════════════════════════════════════════════════
           Size    Brute Force (ms)    K-D Tree (ms)    Speedup   Correct?
   ------------  ------------------  ---------------  ---------  ---------
-       100,000              22.145            0.118      187.7×     ✓ PASS
-       200,000              44.247            0.097      455.2×     ✓ PASS
-       300,000              68.236            0.117      583.6×     ✓ PASS
-       500,000             114.890            0.116      992.7×     ✓ PASS
-     1,000,000           (skipped)            0.194          —          —
+       100,000              22.778            0.131      173.8×     ✓ PASS
+       200,000              46.234            0.103      448.1×     ✓ PASS
+       300,000              68.943            0.114      606.6×     ✓ PASS
+       500,000             116.519            0.117      998.7×     ✓ PASS
+     1,000,000           (skipped)            0.185          —          —
 
   Note: Brute force skipped for n > 500,000 (too slow for laptop benchmarking)
 
@@ -26,23 +26,23 @@ Loading 1M dataset from user_profiles_1m.csv …
 ═════════════════════════════════════════════════════════════════
       k    Brute Force (ms)    K-D Tree (ms)    Speedup   Correct?
   -----  ------------------  ---------------  ---------  ---------
-      1              22.680            0.063      359.8×     ✓ PASS
-      5              22.144            0.114      193.7×     ✓ PASS
-     10              22.715            0.165      137.4×     ✓ PASS
-     15              22.230            0.213      104.6×     ✓ PASS
-     20              22.375            0.263       84.9×     ✓ PASS
+      1              23.308            0.061      380.6×     ✓ PASS
+      5              23.205            0.116      200.4×     ✓ PASS
+     10              23.086            0.163      141.7×     ✓ PASS
+     15              23.318            0.220      106.0×     ✓ PASS
+     20              23.376            0.269       86.8×     ✓ PASS
 
 ═════════════════════════════════════════════════════════════════
   Experiment 3 — Effect of Weight Combinations  (n=100,000, k=5)
 ═════════════════════════════════════════════════════════════════
   Weight Set                   Brute Force (ms)    K-D Tree (ms)   Correct?
   -------------------------  ------------------  ---------------  ---------
-  Equal weights                          22.327            0.112     ✓ PASS
-  Age dominates                          22.841            0.114     ✓ PASS
-  Income dominates                       22.167            0.137     ✓ PASS
-  Domain dominates                       22.855            0.119     ✓ PASS
-  Degree dominates                       22.186            0.112     ✓ PASS
-  Mixed weights                          23.021            0.073     ✓ PASS
+  Equal weights                          23.682            0.119     ✓ PASS
+  Age dominates                          23.393            0.114     ✓ PASS
+  Income dominates                       23.427            0.128     ✓ PASS
+  Domain dominates                       23.360            0.117     ✓ PASS
+  Degree dominates                       23.275            0.115     ✓ PASS
+  Mixed weights                          23.408            0.071     ✓ PASS
 
 ═════════════════════════════════════════════════════════════════
   Experiment 4 — Correctness Verification  (20 random queries)
@@ -77,11 +77,11 @@ Loading 1M dataset from user_profiles_1m.csv …
 ═════════════════════════════════════════════════════════════════
           Size    Build Time (ms)         Nodes
   ------------  -----------------  ------------
-       100,000             277.77       100,000
-       200,000             489.58       200,000
-       300,000             802.02       300,000
-       500,000            1727.91       500,000
-     1,000,000            3547.35     1,000,000
+       100,000             244.55       100,000
+       200,000             432.97       200,000
+       300,000             695.38       300,000
+       500,000            1523.72       500,000
+     1,000,000            3033.43     1,000,000
 
 ═════════════════════════════════════════════════════════════════
   Summary
