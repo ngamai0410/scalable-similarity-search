@@ -40,14 +40,9 @@ from dataset  import DatasetGenerator
 from baseline import LinearSearch
 from kdtree   import KDTree
 
-
-# ═══════════════════════════════════════════ CONFIG ══════════════════════════
-
 RANDOM_SEED  = 42       # fixed seed → reproducible results
 RUNS_PER_EXP = 5        # average over this many queries per scenario
 RESULTS_FILE = 'benchmark_results.txt'
-
-# ═══════════════════════════════════════════ HELPERS ═════════════════════════
 
 output_lines = []   # collects every printed line so we can save to file
 

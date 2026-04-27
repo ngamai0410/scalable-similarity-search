@@ -21,13 +21,10 @@ No external libraries are used.
 import sys
 import time
 
-from profile     import UserProfile
 from dataset     import DatasetGenerator
 from baseline    import LinearSearch
 from kdtree      import KDTree
-
-
-# ======================================================== constants / config ==
+from profile     import UserProfile, AGE_MIN, AGE_MAX, HOURS_MAX, INCOME_MIN, INCOME_MAX, DEGREES, DOMAINS
 
 DATASET_FILE    = 'user_profiles.csv'
 DEFAULT_SIZE    = 100_000
@@ -37,9 +34,6 @@ BENCHMARK_SEED  = 999
 
 SEPARATOR  = '=' * 65
 SEPARATOR2 = '-' * 65
-
-
-# ============================================================= display utils ==
 
 def _header():
     print(SEPARATOR)
@@ -55,7 +49,6 @@ def _print_results(results, label, elapsed_s):
     for rank, (dist, profile) in enumerate(results, 1):
         print(f'  {rank:>2}. dist={dist:.6f}  |  {profile}')
 
-
 def _compare(baseline_res, kd_res, baseline_t, kd_t):
     print(f'\n  Baseline time : {baseline_t * 1000:.1f} ms')
     print(f'  K-D Tree time : {kd_t * 1000:.1f} ms', end='')
@@ -69,9 +62,6 @@ def _compare(baseline_res, kd_res, baseline_t, kd_t):
         print('  Correctness   : PASS — both methods return identical neighbours')
     else:
         print('  Correctness   : MISMATCH — results differ (investigate!)')
-
-
-# ========================================================= dataset handling ==
 
 def _load_or_generate(size):
     if DatasetGenerator.exists(DATASET_FILE):
@@ -93,7 +83,6 @@ def _load_or_generate(size):
         print(f' done  ({time.time() - t0:.2f}s)')
     return profiles
 
-
 def _build_indices(profiles):
     print('\nBuilding search indices …')
     baseline = LinearSearch(profiles)
@@ -105,9 +94,6 @@ def _build_indices(profiles):
     elapsed = time.time() - t0
     print(f' done  ({elapsed:.2f}s)')
     return baseline, kdtree
-
-
-# ============================================================= query runner ==
 
 def _run_query(query, k, weights, baseline, kdtree):
     print(f'\nQuery  : {query}')
@@ -128,9 +114,6 @@ def _run_query(query, k, weights, baseline, kdtree):
     _print_results(kd_results, 'Optimised — K-D Tree',   kd_time)
     _compare(bl_results, kd_results, bl_time, kd_time)
 
-
-# =========================================================== input helpers ==
-
 def _safe_input(prompt_text):
     """Wrapper around input() that handles EOF / KeyboardInterrupt gracefully."""
     try:
@@ -138,7 +121,6 @@ def _safe_input(prompt_text):
     except (EOFError, KeyboardInterrupt):
         print('\nExiting.')
         sys.exit(0)
-
 
 def _get_int(prompt_text, lo, hi):
     while True:
@@ -151,7 +133,6 @@ def _get_int(prompt_text, lo, hi):
         except ValueError:
             print('  Invalid input — please enter an integer.')
 
-
 def _get_float(prompt_text, lo, hi):
     while True:
         raw = _safe_input(prompt_text).strip()
@@ -163,7 +144,6 @@ def _get_float(prompt_text, lo, hi):
         except ValueError:
             print('  Invalid input — please enter a number.')
 
-
 def _get_choice(prompt_text, options):
     while True:
         raw = _safe_input(prompt_text).strip()
@@ -174,7 +154,6 @@ def _get_choice(prompt_text, options):
         except ValueError:
             pass
         print(f'  Please enter a number between 1 and {len(options)}.')
-
 
 def _get_weights():
     print('\nEnter 5 attribute weights  [age  income  degree  hours  domain]')
@@ -189,9 +168,6 @@ def _get_weights():
         except ValueError:
             print('  Invalid input — please enter 5 numbers separated by spaces.')
 
-
-# ============================================================ interactive mode ==
-
 def _interactive_mode(baseline, kdtree):
     print(f'\n{SEPARATOR}')
     print('  Interactive Query Mode  (press Ctrl-C or type "quit" to exit)')
@@ -201,26 +177,26 @@ def _interactive_mode(baseline, kdtree):
         # ---- Build query profile ----
         print('\n--- Query Profile ---')
         age = _get_int(
-            f'  Age ({UserProfile.AGE_MIN}–{UserProfile.AGE_MAX}): ',
-            UserProfile.AGE_MIN, UserProfile.AGE_MAX)
+            f'  Age ({AGE_MIN}–{AGE_MAX}): ',
+            AGE_MIN, AGE_MAX)
 
         income = _get_int(
-            f'  Income in millions VND ({UserProfile.INCOME_MIN}–{UserProfile.INCOME_MAX}): ',
-            UserProfile.INCOME_MIN, UserProfile.INCOME_MAX)
+            f'  Income in millions VND ({INCOME_MIN}–{INCOME_MAX}): ',
+            INCOME_MIN, INCOME_MAX)
 
         print('  Degree options:')
-        for i, d in enumerate(UserProfile.DEGREES, 1):
+        for i, d in enumerate(DEGREES, 1):
             print(f'    {i}. {d}')
-        degree = _get_choice('  Select degree (1–4): ', UserProfile.DEGREES)
+        degree = _get_choice('  Select degree (1–4): ', DEGREES)
 
         hours = _get_float(
-            f'  Self-learning hours/day (0–{UserProfile.HOURS_MAX}): ',
-            0.0, UserProfile.HOURS_MAX)
+            f'  Self-learning hours/day (0–{HOURS_MAX}): ',
+            0.0, HOURS_MAX)
 
         print('  Domain options:')
-        for i, d in enumerate(UserProfile.DOMAINS, 1):
+        for i, d in enumerate(DOMAINS, 1):
             print(f'    {i}. {d}')
-        domain = _get_choice('  Select domain (1–5): ', UserProfile.DOMAINS)
+        domain = _get_choice('  Select domain (1–5): ', DOMAINS)
 
         query = UserProfile(-1, age, income, degree, hours, domain)
 
@@ -234,9 +210,6 @@ def _interactive_mode(baseline, kdtree):
         again = _safe_input('\nRun another query? (y/n): ').strip().lower()
         if again != 'y':
             break
-
-
-# ============================================================= benchmark mode ==
 
 def _benchmark_mode(profiles, baseline, kdtree):
     import random
@@ -279,9 +252,6 @@ def _benchmark_mode(profiles, baseline, kdtree):
     if avg_kd > 0:
         print(f'  Average speedup       : {avg_bl / avg_kd:.1f}×')
 
-
-# ================================================================= demo mode ==
-
 def _demo_mode(profiles, baseline, kdtree):
     """Run a canned demo query — useful for the submission video."""
     print(f'\n{SEPARATOR}')
@@ -300,9 +270,6 @@ def _demo_mode(profiles, baseline, kdtree):
     weights = [1.0, 0.5, 1.5, 1.0, 2.0]   # emphasise domain and degree
 
     _run_query(query, k, weights, baseline, kdtree)
-
-
-# ================================================================== main =====
 
 def _parse_args():
     args      = sys.argv[1:]
@@ -337,7 +304,6 @@ def _parse_args():
 
     return mode, size
 
-
 def main():
     _header()
     mode, size = _parse_args()
@@ -358,7 +324,6 @@ def main():
         _interactive_mode(baseline, kdtree)
 
     print('\nDone.')
-
 
 if __name__ == '__main__':
     main()
