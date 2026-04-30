@@ -1,54 +1,10 @@
-"""
-distance.py - Weighted distance function for user profile similarity.
-
-Design decisions
-----------------
-* Numerical attributes (age, income, self_learning_hours) and the ordinal
-  attribute (highest_degree) are normalised to [0, 1] before the distance is
-  computed, so each attribute contributes comparably regardless of its raw scale.
-* The nominal attribute (favourite_domain) uses binary distance:
-      0.0  — profiles share the same domain
-      1.0  — profiles belong to different domains
-  This avoids imposing a false ordinal structure on an unordered category.
-* The final distance is a weighted Euclidean norm:
-
-      d(a, b, w) = sqrt( w0*(Δage)²  + w1*(Δincome)²
-                       + w2*(Δdegree)² + w3*(Δhours)²
-                       + w4*(Δdomain)² )
-
-  where each Δ is the normalised difference (or binary flag for domain).
-  All terms are non-negative, so the result is always >= 0.
-
-No external libraries are used — only the built-in 'math' module.
-"""
+"""Weighted Euclidean distance between two UserProfile instances."""
 
 import math
 
 
 def weighted_distance(profile_a, profile_b, weights):
-    """
-    Compute the weighted distance between two UserProfile instances.
-
-    Parameters
-    ----------
-    profile_a, profile_b : UserProfile
-        The two profiles to compare. Both must have a precomputed `.vector`
-        tuple and a `.domain_idx` integer attribute.
-    weights : sequence of 5 floats
-        [w_age, w_income, w_degree, w_hours, w_domain]
-        Each weight must be >= 0.
-
-    Returns
-    -------
-    float
-        Non-negative distance value. Returns 0.0 when both profiles are
-        identical under the given weights.
-
-    Complexity
-    ----------
-    Time : O(1)  — fixed five-dimensional computation
-    Space: O(1)
-    """
+    """Return weighted Euclidean distance between two profiles."""
     va = profile_a.vector
     vb = profile_b.vector
 
