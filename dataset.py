@@ -20,8 +20,6 @@ class DatasetGenerator:
     _HEADER = ['id', 'age', 'income', 'highest_degree',
                'self_learning_hours', 'favourite_domain']
 
-    # -------------------------------------------------------------- Generate --
-
     @staticmethod
     def generate(size=DEFAULT_SIZE, seed=42):
         """

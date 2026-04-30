@@ -14,20 +14,18 @@ Vector layout (all values in [0, 1] except domain which keeps its raw index):
 The domain attribute uses binary distance in actual distance computation
 (0 if identical, 1 if different), not continuous difference.
 """
+DEGREES = ['High School', 'Bachelor', 'Master', 'PhD']
+DOMAINS = ['AI', 'Software Engineering', 'Data Science', 'Cybersecurity', 'Business Analytics']
 
+AGE_MIN, AGE_MAX = 18, 70
+INCOME_MIN, INCOME_MAX = 5, 100
+HOURS_MAX = 4.0
+
+_AGE_RANGE = AGE_MAX - AGE_MIN  # 52
+_INCOME_RANGE = INCOME_MAX - INCOME_MIN  # 95
+_DEGREE_RANGE = len(DEGREES) - 1  # 3
 
 class UserProfile:
-    DEGREES = ['High School', 'Bachelor', 'Master', 'PhD']
-    DOMAINS = ['AI', 'Software Engineering', 'Data Science', 'Cybersecurity', 'Business Analytics']
-
-    AGE_MIN, AGE_MAX       = 18, 70
-    INCOME_MIN, INCOME_MAX = 5, 100
-    HOURS_MAX              = 4.0
-
-    _AGE_RANGE    = AGE_MAX - AGE_MIN          # 52
-    _INCOME_RANGE = INCOME_MAX - INCOME_MIN    # 95
-    _DEGREE_RANGE = len(DEGREES) - 1           # 3
-
     def __init__(self, profile_id, age, income, highest_degree,
                  self_learning_hours, favourite_domain):
         self.id                  = profile_id
@@ -38,19 +36,17 @@ class UserProfile:
         self.favourite_domain    = favourite_domain
 
         # Precomputed indices for fast access
-        self.domain_idx = self.DOMAINS.index(favourite_domain)
-        degree_idx      = self.DEGREES.index(highest_degree)
+        self.domain_idx = DOMAINS.index(favourite_domain)
+        degree_idx      = DEGREES.index(highest_degree)
 
         # Normalized 5-D vector (stored as tuple for immutability and speed)
         self.vector = (
-            (age - self.AGE_MIN)          / self._AGE_RANGE,
-            (income - self.INCOME_MIN)    / self._INCOME_RANGE,
-            degree_idx                    / self._DEGREE_RANGE,
-            self_learning_hours           / self.HOURS_MAX,
+            (age - AGE_MIN)               / _AGE_RANGE,
+            (income - INCOME_MIN)         / _INCOME_RANGE,
+            degree_idx                    / _DEGREE_RANGE,
+            self_learning_hours           / HOURS_MAX,
             float(self.domain_idx),        # raw index used only for tree splitting
         )
-
-    # ------------------------------------------------------------------ I/O --
 
     def to_row(self):
         """Return a list of values suitable for CSV writing."""
