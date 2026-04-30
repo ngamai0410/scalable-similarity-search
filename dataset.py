@@ -1,16 +1,11 @@
-"""
-dataset.py - Dataset generation and persistence for the Similarity Search System.
-
-Generates random user profiles using only Python's built-in 'random' module.
-Persists and loads data using the built-in 'csv' module.
-No external libraries are used.
-"""
+"""Dataset generation and persistence using only built-in random and csv modules."""
 
 import csv
 import os
 import random
 
-from profile import UserProfile
+from profile import (UserProfile, DEGREES, DOMAINS,
+                     AGE_MIN, AGE_MAX, INCOME_MIN, INCOME_MAX, HOURS_MAX)
 
 
 class DatasetGenerator:
@@ -22,22 +17,14 @@ class DatasetGenerator:
 
     @staticmethod
     def generate(size=DEFAULT_SIZE, seed=42):
-        """
-        Generate *size* random UserProfile objects.
-
-        All attributes are drawn uniformly from their valid ranges.
-        The random seed is fixed by default so results are reproducible.
-
-        Time complexity : O(n)
-        Space complexity: O(n)
-        """
+        """Generate *size* random UserProfile objects with a fixed seed."""
         random.seed(seed)
 
-        degrees = UserProfile.DEGREES
-        domains = UserProfile.DOMAINS
-        age_min, age_max       = UserProfile.AGE_MIN, UserProfile.AGE_MAX
-        inc_min, inc_max       = UserProfile.INCOME_MIN, UserProfile.INCOME_MAX
-        hours_max              = UserProfile.HOURS_MAX
+        degrees = DEGREES
+        domains = DOMAINS
+        age_min, age_max = AGE_MIN, AGE_MAX
+        inc_min, inc_max = INCOME_MIN, INCOME_MAX
+        hours_max        = HOURS_MAX
 
         profiles = []
         for i in range(size):
@@ -54,12 +41,7 @@ class DatasetGenerator:
 
     @staticmethod
     def save(profiles, filepath=DEFAULT_FILE):
-        """
-        Write profiles to a CSV file.
-
-        Time complexity : O(n)
-        Space complexity: O(1) — rows are written one at a time.
-        """
+        """Write profiles to a CSV file."""
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(DatasetGenerator._HEADER)
@@ -70,12 +52,7 @@ class DatasetGenerator:
 
     @staticmethod
     def load(filepath=DEFAULT_FILE):
-        """
-        Load profiles from a previously saved CSV file.
-
-        Time complexity : O(n)
-        Space complexity: O(n)
-        """
+        """Load profiles from a previously saved CSV file."""
         profiles = []
         with open(filepath, newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
