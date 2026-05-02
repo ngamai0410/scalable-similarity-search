@@ -14,8 +14,8 @@ Build phase
 
   This produces a balanced binary tree of height ≈ log₂(n).
 
-  Build complexity:  O(n log² n)  — sorting O(n log n) at each of log n levels.
-  Space complexity:  O(n)         — one node per profile.
+  Build complexity:  O(n log² n)  - sorting O(n log n) at each of log n levels.
+  Space complexity:  O(n)         - one node per profile.
 
 Search phase (branch-and-bound)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,7 +44,7 @@ Search phase (branch-and-bound)
 
   Search complexity:  O(k · n^(1−1/d)) average for d dimensions.
                       O(n) worst case (degrades to linear scan in high-d
-                      spaces — known as the curse of dimensionality for d≥5).
+                      spaces - known as the curse of dimensionality for d≥5).
 
 Dimension details
 -----------------
