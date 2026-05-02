@@ -267,23 +267,6 @@ def experiment_5(all_profiles):
 
         log(f'  {n:>12,}  {build_t*1000:>17.2f}  {n:>12,}')
 
-
-# ═══════════════════════════════════════════ SUMMARY ═════════════════════════
-
-def print_summary():
-    section('Summary')
-    log('  Key findings to include in your report:')
-    log()
-    log('  1. Brute force time grows linearly with dataset size (O(n))')
-    log('  2. K-D Tree is significantly faster on large datasets')
-    log('  3. Both methods return identical results (correctness verified)')
-    log('  4. Changing k has minimal effect on brute force time')
-    log('  5. K-D Tree build time is a one-off cost amortised over many queries')
-    log()
-    log('  Copy the tables above into Section 3 (Evaluation) of your report.')
-    log('  Fill in the Speedup column analysis in your own words.')
-
-
 # ═══════════════════════════════════════════ MAIN ════════════════════════════
 
 def main():
@@ -338,7 +321,6 @@ def main():
     experiment_3(all_profiles)
     experiment_4(all_profiles)
     experiment_5(all_profiles)
-    print_summary()
 
     # Save results to file
     with open(RESULTS_FILE, 'w', encoding='utf-8') as f:
