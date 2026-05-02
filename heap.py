@@ -1,10 +1,6 @@
 """
 heap.py - Custom binary MaxHeap implemented from scratch.
 
-This module replaces Python's built-in heapq, in line with the project's
-constraint that all data structures and algorithms must be implemented by
-the team.
-
 A MaxHeap is a complete binary tree stored in an array such that the value
 at every parent node is greater than or equal to the values at its children.
 This invariant lets us:
@@ -18,7 +14,7 @@ In this project, the heap stores tuples of the form
 ordered by Python's natural tuple comparison.  The largest distance is
 therefore always at the root, which represents the current "worst" of the
 top-k candidates.  When a new candidate has a smaller distance than the
-root, we replace the root and sift down — this is exactly what we need for
+root, we replace the root and sift down - this is exactly what we need for
 bounded top-k retrieval.
 
 Tie-breaking on profile_id is handled implicitly by tuple comparison: if two
@@ -77,7 +73,7 @@ class MaxHeap:
         Replace the root with *item* and restore the heap property.
 
         Equivalent to a pop followed by a push but in a single sift-down
-        pass — this is the operation we use to swap a worse candidate out
+        pass - this is the operation we use to swap a worse candidate out
         for a better one when maintaining the top-k set.
         """
         self._items[0] = item

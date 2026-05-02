@@ -15,11 +15,11 @@ a new candidate could improve the answer.
 
 Complexity
 ----------
-Time  (build): O(n)   — just stores a reference to the profile list
-Time  (query): O(n)   — one pass through all n profiles;
+Time  (build): O(n)   - just stores a reference to the profile list
+Time  (query): O(n)   - one pass through all n profiles;
                          each heap operation is O(log k), k <= 20, so O(log k)
                          is effectively O(1) here.
-Space (query): O(k)   — heap holds at most k entries at any time
+Space (query): O(k)   - heap holds at most k entries at any time
 
 No external libraries are used.  The priority queue is provided by our own
 MaxHeap implementation in heap.py.

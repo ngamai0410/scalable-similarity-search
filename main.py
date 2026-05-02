@@ -38,7 +38,7 @@ SEPARATOR2 = '-' * 65
 def _header():
     print(SEPARATOR)
     print('  Scalable Similarity Search System')
-    print('  RMIT Algorithms & Analysis 2026A  —  Postgraduate Project')
+    print('  RMIT Algorithms & Analysis 2026A  -  Postgraduate Project')
     print(SEPARATOR)
 
 
@@ -59,9 +59,9 @@ def _compare(baseline_res, kd_res, baseline_t, kd_t):
     bl_ids = {p.id for _, p in baseline_res}
     kd_ids = {p.id for _, p in kd_res}
     if bl_ids == kd_ids:
-        print('  Correctness   : PASS — both methods return identical neighbours')
+        print('  Correctness   : PASS - both methods return identical neighbours')
     else:
-        print('  Correctness   : MISMATCH — results differ (investigate!)')
+        print('  Correctness   : MISMATCH - results differ (investigate!)')
 
 def _load_or_generate(size):
     if DatasetGenerator.exists(DATASET_FILE):
@@ -71,7 +71,7 @@ def _load_or_generate(size):
         elapsed  = time.time() - t0
         print(f' done  ({len(profiles):,} profiles, {elapsed:.2f}s)')
     else:
-        print(f'\nDataset not found — generating {size:,} profiles …',
+        print(f'\nDataset not found - generating {size:,} profiles …',
               end='', flush=True)
         t0       = time.time()
         profiles = DatasetGenerator.generate(size)
@@ -110,8 +110,8 @@ def _run_query(query, k, weights, baseline, kdtree):
     kd_results = kdtree.search(query, k, weights)
     kd_time    = time.time() - t0
 
-    _print_results(bl_results, 'Baseline — Linear Scan', bl_time)
-    _print_results(kd_results, 'Optimised — K-D Tree',   kd_time)
+    _print_results(bl_results, 'Baseline - Linear Scan', bl_time)
+    _print_results(kd_results, 'Optimised - K-D Tree',   kd_time)
     _compare(bl_results, kd_results, bl_time, kd_time)
 
 def _safe_input(prompt_text):
@@ -131,7 +131,7 @@ def _get_int(prompt_text, lo, hi):
                 return val
             print(f'  Please enter a value between {lo} and {hi}.')
         except ValueError:
-            print('  Invalid input — please enter an integer.')
+            print('  Invalid input - please enter an integer.')
 
 def _get_float(prompt_text, lo, hi):
     while True:
@@ -142,7 +142,7 @@ def _get_float(prompt_text, lo, hi):
                 return val
             print(f'  Please enter a value between {lo} and {hi}.')
         except ValueError:
-            print('  Invalid input — please enter a number.')
+            print('  Invalid input - please enter a number.')
 
 def _get_choice(prompt_text, options):
     while True:
@@ -166,7 +166,7 @@ def _get_weights():
                 return w
             print('  Need exactly 5 non-negative numbers.')
         except ValueError:
-            print('  Invalid input — please enter 5 numbers separated by spaces.')
+            print('  Invalid input - please enter 5 numbers separated by spaces.')
 
 def _interactive_mode(baseline, kdtree):
     print(f'\n{SEPARATOR}')
@@ -253,7 +253,7 @@ def _benchmark_mode(profiles, baseline, kdtree):
         print(f'  Average speedup       : {avg_bl / avg_kd:.1f}×')
 
 def _demo_mode(profiles, baseline, kdtree):
-    """Run a canned demo query — useful for the submission video."""
+    """Run a canned demo query - useful for the submission video."""
     print(f'\n{SEPARATOR}')
     print('  Demo Mode')
     print(SEPARATOR)

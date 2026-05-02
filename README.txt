@@ -1,6 +1,6 @@
 ================================================================
   Scalable Similarity Search System
-  RMIT Algorithms & Analysis 2026A — Postgraduate Project
+  RMIT Algorithms & Analysis 2026A - Postgraduate Project
 ================================================================
 
 ----------------------------------------------------------------
@@ -15,24 +15,24 @@ Check your Python version:
 No virtual environment or package installation is required.
 All Python modules used (random, csv, math, time, sys, os) are
 part of Python's standard library.  The priority queue is provided
-by our own MaxHeap implementation in heap.py — heapq is NOT used.
+by our own MaxHeap implementation in heap.py - heapq is NOT used.
 
 ----------------------------------------------------------------
 2. FILE STRUCTURE
 ----------------------------------------------------------------
 group-project/
-  main.py               — entry point (launch this file)
-  profile.py            — UserProfile data class
-  dataset.py            — dataset generation and CSV I/O
-  distance.py           — weighted distance function
-  heap.py               — custom MaxHeap (replaces heapq)
-  baseline.py           — baseline linear-scan search
-  kdtree.py             — optimised k-d tree search
-  benchmark.py          — experiment and benchmarking script
-  README.txt            — this file
-  user_profiles.csv     — pre-generated dataset (100,000 profiles)
-  user_profiles_1m.csv  — extended dataset (1,000,000 profiles)
-  benchmark_results.txt — full experiment results
+  main.py               - entry point (launch this file)
+  profile.py            - UserProfile data class
+  dataset.py            - dataset generation and CSV I/O
+  distance.py           - weighted distance function
+  heap.py               - custom MaxHeap
+  baseline.py           - baseline linear-scan search
+  kdtree.py             - optimised k-d tree search
+  benchmark.py          - experiment and benchmarking script
+  README.txt            - this file
+  user_profiles.csv     - pre-generated dataset (100,000 profiles)
+  user_profiles_1m.csv  - extended dataset (1,000,000 profiles)
+  benchmark_results.txt - full experiment results
 ----------------------------------------------------------------
 3. HOW TO RUN
 ----------------------------------------------------------------
@@ -69,7 +69,7 @@ All commands are run from inside the group-project/ directory.
 -- e) Demo mode --
   python3 main.py --demo
 
-  Runs a single canned query and shows full output — useful for
+  Runs a single canned query and shows full output - useful for
   demonstrations and the submission video.
 
 -- f) Full experiment script --
@@ -109,18 +109,18 @@ Query parameters:
 ----------------------------------------------------------------
 For each query, the system prints:
 
-  Baseline — Linear Scan  [<time> ms]
+  Baseline - Linear Scan  [<time> ms]
     1. dist=<value>  |  Profile #<id>: age=..., income=..., ...
     2. ...
     ...
     k. ...
 
-  Optimised — K-D Tree  [<time> ms]
+  Optimised - K-D Tree  [<time> ms]
     (same format)
 
   Baseline time : X ms
   K-D Tree time : Y ms  (speedup: Z×)
-  Correctness   : PASS — both methods return identical neighbours
+  Correctness   : PASS - both methods return identical neighbours
 
 ----------------------------------------------------------------
 6. ALGORITHM SUMMARY
@@ -151,27 +151,27 @@ K-D Tree (kdtree.py)
 ----------------------------------------------------------------
 Full results are available in benchmark_results.txt.
 
-  Experiment 1 — Dataset Size (k=5, equal weights)
+  Experiment 1 - Dataset Size (k=5, equal weights)
       100,000 profiles: Baseline= 22.778ms, K-D Tree=0.131ms, Speedup=173.8×
       200,000 profiles: Baseline= 46.234ms, K-D Tree=0.103ms, Speedup=448.1×
       300,000 profiles: Baseline= 68.943ms, K-D Tree=0.114ms, Speedup=606.6×
       500,000 profiles: Baseline=116.519ms, K-D Tree=0.117ms, Speedup=998.7×
-    1,000,000 profiles: Baseline=(skipped), K-D Tree=0.185ms, Speedup=    —
+    1,000,000 profiles: Baseline=(skipped), K-D Tree=0.185ms, Speedup=    -
 
-  Experiment 2 — Value of k (n=100,000, equal weights)
+  Experiment 2 - Value of k (n=100,000, equal weights)
     k=1:  Speedup=380.6×
     k=5:  Speedup=200.4×
     k=10: Speedup=141.7×
     k=15: Speedup=106.0×
     k=20: Speedup= 86.8×
 
-  Experiment 3 — Weight combinations (n=100,000, k=5)
+  Experiment 3 - Weight combinations (n=100,000, k=5)
     K-D Tree handles all 6 weight configurations correctly (✓ PASS)
 
-  Experiment 4 — Correctness
+  Experiment 4 - Correctness
     20/20 random queries matched perfectly (100% pass rate)
 
-  Experiment 5 — K-D Tree build time
+  Experiment 5 - K-D Tree build time
       100,000 profiles built in   244.55ms
       200,000 profiles built in   432.97ms
       500,000 profiles built in 1,523.72ms
@@ -191,20 +191,15 @@ To run the full set of experiments (Member 4's benchmarking):
 ----------------------------------------------------------------
 9. TEAM MEMBERS & CONTRIBUTIONS
 ----------------------------------------------------------------
-  Member 1 — Nga Mai Thanh  25%  profile.py, dataset.py, distance.py
+  Member 1 - Nga Mai Thanh  25%  profile.py, dataset.py, distance.py
                                   Data generation, encoding,
                                   normalisation, distance function
-  Member 2 — Nam            25%  baseline.py
+  Member 2 - Nam            25%  baseline.py
                                   Brute-force k-NN search
-  Member 3 — Adam           25%  kdtree.py
+  Member 3 - Adam           25%  kdtree.py
                                   K-D Tree construction and search
-  Member 4 — Yoshita Sarin  25%  benchmark.py, benchmark_results.txt,
+  Member 4 - Yoshita Sarin  25%  benchmark.py, benchmark_results.txt,
                                   README.txt, experiments,
                                   report consolidation
- 
-----------------------------------------------------------------
-10. DEMO VIDEO LINK
-----------------------------------------------------------------
-  [Insert link here after recording]
  
 ================================================================

@@ -1,7 +1,7 @@
 """
 benchmark.py - Experiment & Benchmarking Script
 ================================================
-Algorithms & Analysis 2026A — Postgraduate Project
+Algorithms & Analysis 2026A - Postgraduate Project
 Member 4: Experiments, Benchmarking, and Report Consolidation
 
 HOW TO RUN
@@ -25,11 +25,11 @@ so you can copy the numbers directly into your report.
 
 EXPERIMENTS
 -----------
-  1. Dataset size     — vary n from 1k to 1M, fix k=5, equal weights
-  2. Value of k       — vary k, fix n=100,000, equal weights
-  3. Weight sets      — vary weights, fix n=100,000, k=5
-  4. Correctness      — verify k-d tree matches brute force on 20 queries
-  5. Build time       — measure k-d tree construction time up to 1M
+  1. Dataset size     - vary n from 1k to 1M, fix k=5, equal weights
+  2. Value of k       - vary k, fix n=100,000, equal weights
+  3. Weight sets      - vary weights, fix n=100,000, k=5
+  4. Correctness      - verify k-d tree matches brute force on 20 queries
+  5. Build time       - measure k-d tree construction time up to 1M
 """
 
 import random
@@ -109,13 +109,13 @@ def subsample(all_profiles, n, seed=RANDOM_SEED):
 
 
 # ═══════════════════════════════════════════ EXPERIMENT 1 ════════════════════
-# Vary dataset size — how does each method scale?
+# Vary dataset size - how does each method scale?
 
 # Sizes above this threshold skip brute force (too slow for a laptop)
 BRUTE_FORCE_LIMIT = 500_000
 
 def experiment_1(all_profiles):
-    section('Experiment 1 — Effect of Dataset Size  (k=5, equal weights)')
+    section('Experiment 1 - Effect of Dataset Size  (k=5, equal weights)')
 
     sizes   = [100_000, 200_000, 300_000, 500_000, 1_000_000]
     k       = 5
@@ -127,13 +127,13 @@ def experiment_1(all_profiles):
 
     for n in sizes:
         if n > len(all_profiles):
-            log(f'  {n:>12,}  {"(not enough data)":>18}  {"—":>15}  {"—":>9}  {"—":>9}')
+            log(f'  {n:>12,}  {"(not enough data)":>18}  {"-":>15}  {"-":>9}  {"-":>9}')
             continue
 
         profiles = subsample(all_profiles, n)
         baseline, kdtree, _ = build_indices(profiles)
 
-        # Skip brute force for very large sizes — too slow
+        # Skip brute force for very large sizes - too slow
         if n <= BRUTE_FORCE_LIMIT:
             bl_time, bl_res = time_search(baseline.search, query, k, weights)
             kd_time, kd_res = time_search(kdtree.search,   query, k, weights)
@@ -142,17 +142,17 @@ def experiment_1(all_profiles):
             log(f'  {n:>12,}  {bl_time*1000:>18.3f}  {kd_time*1000:>15.3f}  {speedup:>9.1f}×  {correct:>9}')
         else:
             kd_time, _ = time_search(kdtree.search, query, k, weights)
-            log(f'  {n:>12,}  {"(skipped)":>18}  {kd_time*1000:>15.3f}  {"—":>9}  {"—":>9}')
+            log(f'  {n:>12,}  {"(skipped)":>18}  {kd_time*1000:>15.3f}  {"-":>9}  {"-":>9}')
 
     log()
     log(f'  Note: Brute force skipped for n > {BRUTE_FORCE_LIMIT:,} (too slow for laptop benchmarking)')
 
 
 # ═══════════════════════════════════════════ EXPERIMENT 2 ════════════════════
-# Vary k — does the number of neighbours affect speed?
+# Vary k - does the number of neighbours affect speed?
 
 def experiment_2(all_profiles):
-    section('Experiment 2 — Effect of k  (n=100,000, equal weights)')
+    section('Experiment 2 - Effect of k  (n=100,000, equal weights)')
 
     k_values = [1, 5, 10, 15, 20]
     weights  = [1.0, 1.0, 1.0, 1.0, 1.0]
@@ -174,10 +174,10 @@ def experiment_2(all_profiles):
 
 
 # ═══════════════════════════════════════════ EXPERIMENT 3 ════════════════════
-# Vary weights — does emphasising different attributes change results?
+# Vary weights - does emphasising different attributes change results?
 
 def experiment_3(all_profiles):
-    section('Experiment 3 — Effect of Weight Combinations  (n=100,000, k=5)')
+    section('Experiment 3 - Effect of Weight Combinations  (n=100,000, k=5)')
 
     profiles = subsample(all_profiles, 100_000)
     baseline, kdtree, _ = build_indices(profiles)
@@ -205,10 +205,10 @@ def experiment_3(all_profiles):
 
 
 # ═══════════════════════════════════════════ EXPERIMENT 4 ════════════════════
-# Correctness test — 20 random queries, all must match
+# Correctness test - 20 random queries, all must match
 
 def experiment_4(all_profiles):
-    section('Experiment 4 — Correctness Verification  (20 random queries)')
+    section('Experiment 4 - Correctness Verification  (20 random queries)')
 
     random.seed(RANDOM_SEED)
     profiles = subsample(all_profiles, 100_000)
@@ -247,7 +247,7 @@ def experiment_4(all_profiles):
 # K-D Tree build time across dataset sizes
 
 def experiment_5(all_profiles):
-    section('Experiment 5 — K-D Tree Build Time vs Dataset Size')
+    section('Experiment 5 - K-D Tree Build Time vs Dataset Size')
 
     sizes = [100_000, 200_000, 300_000, 500_000, 1_000_000]
 
@@ -256,7 +256,7 @@ def experiment_5(all_profiles):
 
     for n in sizes:
         if n > len(all_profiles):
-            log(f'  {n:>12,}  {"(not enough data)":>17}  {"—":>12}')
+            log(f'  {n:>12,}  {"(not enough data)":>17}  {"-":>12}')
             continue
 
         profiles = subsample(all_profiles, n)
@@ -271,7 +271,7 @@ def experiment_5(all_profiles):
 
 def main():
     separator()
-    log('  Benchmark Script — Scalable Similarity Search')
+    log('  Benchmark Script - Scalable Similarity Search')
     log('  Algorithms & Analysis 2026A')
     separator()
 
@@ -305,7 +305,7 @@ def main():
             DatasetGenerator.save(all_profiles, 'user_profiles_1m.csv')
             log(f'  Saved in {(time.perf_counter()-t0):.1f}s')
     else:
-        log(f'\nNo dataset found — generating {TARGET:,} profiles …')
+        log(f'\nNo dataset found - generating {TARGET:,} profiles …')
         log('  (This may take 1-2 minutes)')
         t0 = time.perf_counter()
         all_profiles = DatasetGenerator.generate(TARGET)
